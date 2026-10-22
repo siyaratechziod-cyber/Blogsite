@@ -1,0 +1,457 @@
+/* ============================================================
+   BlogHub Admin Panel Styles
+   Loaded only on admin pages, after bloghub.css
+   ============================================================ */
+
+/* ---------- Utilities ---------- */
+/* Bootstrap has no min-width utilities; needed so text-truncate
+   works inside flex children (tables, sidebar identity block). */
+.min-w-0 {
+    min-width: 0;
+}
+
+.bh-admin-body {
+    background-color: var(--bh-bg-base);
+}
+
+.bh-admin-shell {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ---------- Sidebar ---------- */
+.bh-admin-sidebar {
+    width: 264px;
+    flex-shrink: 0;
+    background-color: var(--bh-surface-card);
+    border-right: 1px solid var(--bh-border-subtle);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.bh-admin-offcanvas {
+    width: 280px;
+    background-color: var(--bh-surface-card);
+}
+
+.bh-admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--bh-border-subtle);
+    text-decoration: none;
+    color: var(--bh-text-primary);
+    font-size: 1.05rem;
+}
+
+.bh-admin-sidebar-role {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--bh-border-subtle);
+    background-color: var(--bh-surface-muted);
+}
+
+.bh-admin-sidebar-role .min-w-0 {
+    min-width: 0;
+}
+
+.bh-admin-badge {
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: var(--bh-radius-full);
+    background-color: var(--bh-coral-100);
+    color: var(--bh-coral-600);
+}
+
+.bh-admin-nav {
+    padding: 10px 12px 28px;
+}
+
+.bh-admin-nav-heading {
+    display: block;
+    padding: 12px 12px 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--bh-text-muted);
+}
+
+.bh-admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    margin-bottom: 2px;
+    border-radius: var(--bh-radius-md);
+    color: var(--bh-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color var(--bh-transition-fast), color var(--bh-transition-fast);
+}
+
+.bh-admin-nav-link i {
+    font-size: 1.05rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.bh-admin-nav-link:hover,
+.bh-admin-nav-link:focus-visible {
+    background-color: var(--bh-surface-muted);
+    color: var(--bh-text-primary);
+}
+
+.bh-admin-nav-link.active {
+    background-color: var(--bh-coral-500);
+    color: #ffffff;
+}
+
+.bh-admin-nav-badge {
+    margin-left: auto;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: var(--bh-radius-full);
+    background-color: var(--bh-coral-100);
+    color: var(--bh-coral-600);
+}
+
+.bh-admin-nav-link.active .bh-admin-nav-badge {
+    background-color: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+}
+
+/* ---------- Main column ---------- */
+.bh-admin-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.bh-admin-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background-color: var(--bh-surface-card);
+    border-bottom: 1px solid var(--bh-border-subtle);
+}
+
+.bh-admin-page-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.bh-admin-content {
+    padding: 20px 20px 64px;
+}
+
+/* ---------- Cards ---------- */
+.bh-admin-card {
+    background-color: var(--bh-surface-card);
+    border: 1px solid var(--bh-border-subtle);
+    border-radius: var(--bh-radius-lg);
+    box-shadow: var(--bh-shadow-xs);
+    overflow: hidden;
+}
+
+.bh-admin-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--bh-border-subtle);
+}
+
+.bh-admin-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.bh-admin-card-body {
+    padding: 18px;
+}
+
+/* ---------- Stat cards ---------- */
+.bh-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    padding: 16px 18px;
+    background-color: var(--bh-surface-card);
+    border: 1px solid var(--bh-border-subtle);
+    border-radius: var(--bh-radius-lg);
+    box-shadow: var(--bh-shadow-xs);
+    transition: transform var(--bh-transition-fast), box-shadow var(--bh-transition-fast);
+}
+
+.bh-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--bh-shadow-sm);
+}
+
+.bh-stat-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    background-color: var(--bh-coral-100);
+    color: var(--bh-coral-600);
+}
+
+.bh-stat-icon.is-navy {
+    background-color: var(--bh-surface-muted);
+    color: var(--bh-navy-500);
+}
+
+.bh-stat-icon.is-moss {
+    background-color: var(--bh-moss-100);
+    color: var(--bh-moss-600);
+}
+
+.bh-stat-icon.is-muted {
+    background-color: var(--bh-surface-muted);
+    color: var(--bh-text-secondary);
+}
+
+.bh-stat-value {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.bh-stat-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--bh-text-muted);
+}
+
+/* ---------- Tables ---------- */
+.bh-admin-table {
+    width: 100%;
+    margin: 0;
+}
+
+.bh-admin-table thead th {
+    padding: 10px 14px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--bh-text-muted);
+    background-color: var(--bh-surface-muted);
+    border-bottom: 1px solid var(--bh-border-subtle);
+    white-space: nowrap;
+}
+
+.bh-admin-table tbody td {
+    padding: 12px 14px;
+    font-size: 0.875rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--bh-border-subtle);
+}
+
+.bh-admin-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.bh-admin-table tbody tr:hover {
+    background-color: var(--bh-surface-muted);
+}
+
+.bh-table-thumb {
+    width: 56px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: var(--bh-radius-sm);
+    border: 1px solid var(--bh-border-subtle);
+    background-color: var(--bh-surface-muted);
+}
+
+.bh-table-title {
+    font-weight: 600;
+    color: var(--bh-text-primary);
+    text-decoration: none;
+    display: block;
+    max-width: 340px;
+}
+
+.bh-table-title:hover {
+    color: var(--bh-coral-500);
+}
+
+/* ---------- Filters ---------- */
+.bh-admin-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.bh-admin-filters .bh-form-control {
+    min-width: 150px;
+    width: auto;
+}
+
+/* ---------- Empty state ---------- */
+.bh-admin-empty {
+    text-align: center;
+    padding: 52px 20px;
+    color: var(--bh-text-muted);
+}
+
+.bh-admin-empty i {
+    display: block;
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+/* ---------- Pagination ---------- */
+.bh-admin-pagination {
+    padding: 14px 18px;
+    border-top: 1px solid var(--bh-border-subtle);
+}
+
+.bh-admin-pagination .pagination {
+    margin: 0;
+}
+
+/* ---------- Forms ---------- */
+.bh-form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.bh-form-control.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+}
+
+.bh-img-preview {
+    width: 100%;
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: var(--bh-radius-md);
+    border: 1px solid var(--bh-border-subtle);
+    background-color: var(--bh-surface-muted);
+}
+
+.bh-tag-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    margin: 0 6px 8px 0;
+    font-size: 0.82rem;
+    border: 1px solid var(--bh-border-subtle);
+    border-radius: var(--bh-radius-full);
+    background-color: var(--bh-surface-card);
+    cursor: pointer;
+    transition: border-color var(--bh-transition-fast), background-color var(--bh-transition-fast);
+}
+
+.bh-tag-checkbox:hover {
+    border-color: var(--bh-coral-500);
+}
+
+.bh-tag-checkbox input {
+    accent-color: var(--bh-coral-500);
+    margin: 0;
+}
+
+.bh-tag-checkbox:has(input:checked) {
+    border-color: var(--bh-coral-500);
+    background-color: var(--bh-coral-100);
+    color: var(--bh-coral-600);
+    font-weight: 600;
+}
+
+/* ---------- Action icon buttons ---------- */
+.bh-action-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: var(--bh-radius-sm);
+    border: 1px solid var(--bh-border-subtle);
+    background-color: var(--bh-surface-card);
+    color: var(--bh-text-secondary);
+    font-size: 0.85rem;
+    transition: all var(--bh-transition-fast);
+    text-decoration: none;
+}
+
+.bh-action-btn:hover {
+    border-color: var(--bh-coral-500);
+    color: var(--bh-coral-500);
+}
+
+.bh-action-btn.is-danger:hover {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* ---------- Detail lists ---------- */
+.bh-detail-list dt {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--bh-text-muted);
+}
+
+.bh-detail-list dd {
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+    color: var(--bh-text-primary);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px) {
+    .bh-admin-topbar {
+        padding: 10px 12px;
+    }
+
+    .bh-admin-content {
+        padding: 16px 12px 56px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .bh-stat-card {
+        padding: 14px;
+    }
+
+    .bh-stat-value {
+        font-size: 1.25rem;
+    }
+
+    .bh-admin-page-title {
+        font-size: 1rem;
+    }
+}

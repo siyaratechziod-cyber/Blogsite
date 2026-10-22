@@ -1,0 +1,2322 @@
+{
+    "info": {
+        "name": "BlogHub API v1",
+        "description": "Run '1. Auth > Login (author)' and 'Login (admin)' first. Tokens are saved to collection variables automatically. Change base_url if the server is not on 127.0.0.1:8000.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "event": [
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "pm.test('no server error', () => pm.expect(pm.response.code).to.be.below(500));",
+                    "pm.test('JSON response', () => pm.response.to.be.json);"
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000/api/v1"
+        },
+        {
+            "key": "token",
+            "value": ""
+        },
+        {
+            "key": "admin_token",
+            "value": ""
+        },
+        {
+            "key": "post_id",
+            "value": "25"
+        },
+        {
+            "key": "post_slug",
+            "value": "ai"
+        },
+        {
+            "key": "category_id",
+            "value": "1"
+        },
+        {
+            "key": "category_slug",
+            "value": "artificial-intelligence"
+        },
+        {
+            "key": "author_username",
+            "value": "sophiachen"
+        },
+        {
+            "key": "new_post_id",
+            "value": ""
+        },
+        {
+            "key": "new_category_id",
+            "value": ""
+        },
+        {
+            "key": "new_tag_id",
+            "value": ""
+        },
+        {
+            "key": "user_id",
+            "value": ""
+        },
+        {
+            "key": "comment_id",
+            "value": ""
+        },
+        {
+            "key": "message_id",
+            "value": ""
+        },
+        {
+            "key": "subscriber_id",
+            "value": ""
+        }
+    ],
+    "item": [
+        {
+            "name": "1. Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Test User\",\n    \"username\": \"testuser{{$randomInt}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"terms\": true,\n    \"role\": \"reader\",\n    \"device_name\": \"postman\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('status 200/201', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
+                                    "const j = pm.response.json();",
+                                    "if (j.token) { pm.collectionVariables.set('token', j.token); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Login (author)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"sophia.chen@bloghub.test\",\n    \"password\": \"password\",\n    \"device_name\": \"postman\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('status 200/201', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
+                                    "const j = pm.response.json();",
+                                    "if (j.token) { pm.collectionVariables.set('token', j.token); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Login (admin)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@bloghub.test\",\n    \"password\": \"password\",\n    \"device_name\": \"postman\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('status 200/201', () => pm.expect(pm.response.code).to.be.oneOf([200, 201]));",
+                                    "const j = pm.response.json();",
+                                    "if (j.token) { pm.collectionVariables.set('admin_token', j.token); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Login wrong password (expect 422)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"admin@bloghub.test\",\n    \"password\": \"wrong\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('422', () => pm.response.to.have.status(422));"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Me",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Me without token (expect 401)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "me"
+                            ]
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('401', () => pm.response.to.have.status(401));"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Forgot password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/forgot-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "forgot-password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"sophia.chen@bloghub.test\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    }
+                },
+                {
+                    "name": "Reset password",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/reset-password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "reset-password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"token\": \"TOKEN_FROM_EMAIL\",\n    \"email\": \"sophia.chen@bloghub.test\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "logout"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout all devices",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/auth/logout-all",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "logout-all"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Public",
+            "item": [
+                {
+                    "name": "Home",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/home",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "home"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "About",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/about",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "about"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Posts list",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/posts?q=&category=&tag=&sort=latest&page=1&per_page=9",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "posts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "category",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "tag",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "latest"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "9"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const d = pm.response.json().data;",
+                                    "if (d && d.length) { pm.collectionVariables.set('post_id', d[0].id); pm.collectionVariables.set('post_slug', d[0].slug); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Post detail (by slug)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/posts/{{post_slug}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "posts",
+                                "{{post_slug}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Post comments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/posts/{{post_id}}/comments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "posts",
+                                "{{post_id}}",
+                                "comments"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add comment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/posts/{{post_id}}/comments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "posts",
+                                "{{post_id}}",
+                                "comments"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": \"Great article, thanks!\",\n    \"name\": \"Guest Reader\",\n    \"email\": \"guest@example.com\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "name and email are only needed when no token is sent."
+                    }
+                },
+                {
+                    "name": "Categories",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories"
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const d = pm.response.json().data;",
+                                    "if (d && d.length) { pm.collectionVariables.set('category_id', d[0].id); pm.collectionVariables.set('category_slug', d[0].slug); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Category detail",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/categories/{{category_slug}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories",
+                                "{{category_slug}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Tags",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/tags?limit=30",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "tags"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "30"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Authors",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/authors?q=&specialty=&page=1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "authors"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "specialty",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Author profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/authors/{{author_username}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "authors",
+                                "{{author_username}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Author posts",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/authors/{{author_username}}/posts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "authors",
+                                "{{author_username}}",
+                                "posts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/search?q=ai",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "ai"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search suggest",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/search/suggest?q=ai",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "search",
+                                "suggest"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": "ai"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Contact",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/contact",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "contact"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Postman Tester\",\n    \"email\": \"tester@example.com\",\n    \"subject\": \"Hello\",\n    \"message\": \"This is a test message from Postman.\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    }
+                },
+                {
+                    "name": "Newsletter subscribe",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/newsletter/subscribe",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "newsletter",
+                                "subscribe"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"{{$randomEmail}}\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Logged-in user",
+            "item": [
+                {
+                    "name": "Like / unlike post",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/posts/{{post_id}}/like",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "posts",
+                                "{{post_id}}",
+                                "like"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Bookmark / unbookmark post",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/posts/{{post_id}}/bookmark",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "posts",
+                                "{{post_id}}",
+                                "bookmark"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Follow / unfollow author",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/authors/alexandervance/follow",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "authors",
+                                "alexandervance",
+                                "follow"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update profile (multipart)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/profile",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "profile"
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "name",
+                                    "value": "Sophia Chen",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "bio",
+                                    "value": "Updated from Postman",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "specialty",
+                                    "value": "ML Systems",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "twitter",
+                                    "value": "https://x.com/sophiachen",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "profile_image",
+                                    "type": "file",
+                                    "src": [],
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Enable profile_image and pick a file to test uploads."
+                    }
+                },
+                {
+                    "name": "Change password",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/password",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "password"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"current_password\": \"password\",\n    \"password\": \"newpassword123\",\n    \"password_confirmation\": \"newpassword123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "description": "Careful: this really changes the password and signs out other devices."
+                    }
+                },
+                {
+                    "name": "My bookmarks",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/bookmarks",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "bookmarks"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "My likes",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/likes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "likes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Following",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/following",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "following"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Followers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/followers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "followers"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "My comments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/me/comments",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me",
+                                "comments"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Author panel",
+            "item": [
+                {
+                    "name": "Dashboard",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/dashboard",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "dashboard"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Post form options",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts/form-options",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts",
+                                "form-options"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "My posts",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts?q=&status=&page=1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "status",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create post (JSON)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"My first post from Postman\",\n    \"content\": \"This is the body of a post created from Postman. It has to be at least fifty characters long.\",\n    \"category_id\": \"{{category_id}}\",\n    \"status\": \"draft\",\n    \"excerpt\": \"Short summary\",\n    \"tags\": [],\n    \"new_tags\": \"Postman, Testing\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('201', () => pm.response.to.have.status(201));",
+                                    "const j = pm.response.json();",
+                                    "if (j.data && j.data.id) pm.collectionVariables.set('new_post_id', j.data.id);"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Create post (multipart with image)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts"
+                            ]
+                        },
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "title",
+                                    "value": "Post with image",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "content",
+                                    "value": "Body text for a post with an image. Must be at least fifty characters.",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "category_id",
+                                    "value": "{{category_id}}",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": "published",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "new_tags",
+                                    "value": "Postman",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "featured_image",
+                                    "type": "file",
+                                    "src": []
+                                }
+                            ]
+                        },
+                        "description": "Select an image file for featured_image before sending."
+                    }
+                },
+                {
+                    "name": "Get post",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts/{{new_post_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts",
+                                "{{new_post_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update post (JSON)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts/{{new_post_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts",
+                                "{{new_post_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Edited title\",\n    \"content\": \"This is the body of a post created from Postman. It has to be at least fifty characters long.\",\n    \"category_id\": \"{{category_id}}\",\n    \"status\": \"published\",\n    \"excerpt\": \"Short summary\",\n    \"tags\": [],\n    \"new_tags\": \"Postman, Testing\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete post",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts/{{new_post_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts",
+                                "{{new_post_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create post invalid (expect 422)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/posts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "posts"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('422', () => pm.response.to.have.status(422));"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "5. Admin",
+            "auth": {
+                "type": "bearer",
+                "bearer": [
+                    {
+                        "key": "token",
+                        "value": "{{admin_token}}",
+                        "type": "string"
+                    }
+                ]
+            },
+            "item": [
+                {
+                    "name": "Categories",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "categories"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create category",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "categories"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Postman Category {{$randomInt}}\",\n    \"icon\": \"bi-code\",\n    \"description\": \"Created from Postman\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('201', () => pm.response.to.have.status(201));",
+                                    "const j = pm.response.json();",
+                                    "if (j.data && j.data.id) pm.collectionVariables.set('new_category_id', j.data.id);"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get category",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories/{{new_category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "categories",
+                                "{{new_category_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update category",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories/{{new_category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "categories",
+                                "{{new_category_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Postman Category Edited {{$randomInt}}\",\n    \"description\": \"Edited\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete category",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/categories/{{new_category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "categories",
+                                "{{new_category_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Tags",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/tags",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "tags"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create tag",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/tags",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "tags"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"PostmanTag{{$randomInt}}\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('201', () => pm.response.to.have.status(201));",
+                                    "const j = pm.response.json();",
+                                    "if (j.data && j.data.id) pm.collectionVariables.set('new_tag_id', j.data.id);"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Update tag",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/tags/{{new_tag_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "tags",
+                                "{{new_tag_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"PostmanTagEdited{{$randomInt}}\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Delete tag",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/tags/{{new_tag_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "tags",
+                                "{{new_tag_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/users?q=&role=reader&status=",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users"
+                            ],
+                            "query": [
+                                {
+                                    "key": "q",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "role",
+                                    "value": "reader"
+                                },
+                                {
+                                    "key": "status",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const d = pm.response.json().data;",
+                                    "if (d && d.length) { pm.collectionVariables.set('user_id', d[0].id); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get user",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users",
+                                "{{user_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update user",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users",
+                                "{{user_id}}"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Updated Name\",\n    \"email\": \"updated{{$randomInt}}@example.com\",\n    \"role\": \"reader\",\n    \"is_active\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Toggle user status",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/users/{{user_id}}/toggle-status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users",
+                                "{{user_id}}",
+                                "toggle-status"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete user",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/users/{{user_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users",
+                                "{{user_id}}"
+                            ]
+                        },
+                        "description": "Permanently deletes the user."
+                    }
+                },
+                {
+                    "name": "Comments",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/comments?status=&q=",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "comments"
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "q",
+                                    "value": ""
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const d = pm.response.json().data;",
+                                    "if (d && d.length) { pm.collectionVariables.set('comment_id', d[0].id); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Approve comment",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/comments/{{comment_id}}/approve",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "comments",
+                                "{{comment_id}}",
+                                "approve"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Reject comment",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/comments/{{comment_id}}/reject",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "comments",
+                                "{{comment_id}}",
+                                "reject"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete comment",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/comments/{{comment_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "comments",
+                                "{{comment_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Messages",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/messages",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "messages"
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const d = pm.response.json().data;",
+                                    "if (d && d.length) { pm.collectionVariables.set('message_id', d[0].id); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get message",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/messages/{{message_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "messages",
+                                "{{message_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Toggle message read",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/messages/{{message_id}}/read",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "messages",
+                                "{{message_id}}",
+                                "read"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete message",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/messages/{{message_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "messages",
+                                "{{message_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Subscribers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/subscribers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "subscribers"
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const d = pm.response.json().data;",
+                                    "if (d && d.length) { pm.collectionVariables.set('subscriber_id', d[0].id); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete subscriber",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/subscribers/{{subscriber_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "subscribers",
+                                "{{subscriber_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Admin route as author (expect 403)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/admin/users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users"
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{token}}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test('403', () => pm.response.to.have.status(403));"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
